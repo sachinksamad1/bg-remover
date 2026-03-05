@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Remove image backgrounds instantly using AI. Upload, process, and download images with transparent backgrounds." />
+    <title>BG Remover — AI Background Removal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/static/styles.css" />
+</head>
+
+<body>
+    <div class="app-wrapper">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <span class="logo-icon">✦</span>
+                <h1>BG Remover</h1>
+            </div>
+            <p class="tagline">Remove backgrounds instantly with AI</p>
+        </header>
+
+        <!-- Main Card -->
+        <main class="card" id="main-card">
+
+            <!-- Upload State -->
+            <section id="upload-section" class="section active">
+                <div id="drop-zone" class="drop-zone" role="button" tabindex="0"
+                    aria-label="Upload an image by clicking or dragging and dropping">
+                    <div class="drop-zone-content">
+                        <svg class="upload-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 4L24 32" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                            <path d="M14 14L24 4L34 14" stroke="currentColor" stroke-width="3" stroke-linecap="round"
+                                stroke-linejoin="round" />
+                            <path d="M8 28V38C8 40.2091 9.79086 42 12 42H36C38.2091 42 40 40.2091 40 38V28"
+                                stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                        <p class="drop-zone-text">Drag & drop your image here</p>
+                        <p class="drop-zone-hint">or click to browse · PNG, JPG, WEBP, BMP · Max 16 MB</p>
+                    </div>
+                </div>
+                <input type="file" id="file-input" accept="image/png,image/jpeg,image/webp,image/bmp" hidden />
+            </section>
+
+            <!-- Preview State -->
+            <section id="preview-section" class="section">
+                <div class="preview-header">
+                    <h2>Selected Image</h2>
+                    <button id="change-btn" class="btn btn-ghost" type="button">Change</button>
+                </div>
+                <div class="preview-image-wrap">
+                    <img id="preview-img" src="" alt="Selected image preview" />
+                </div>
+                <button id="process-btn" class="btn btn-primary" type="button">
+                    <span class="btn-label">Remove Background</span>
+                    <svg class="btn-arrow" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd"
+                            d="M3 10a.75.75 0 01.75-.75h10.638L10.23 5.29a.75.75 0 111.04-1.08l5.5 5.25a.75.75 0 010 1.08l-5.5 5.25a.75.75 0 11-1.04-1.08l4.158-3.96H3.75A.75.75 0 013 10z"
+                            clip-rule="evenodd" />
+                    </svg>
+                </button>
+            </section>
+
+            <!-- Processing State -->
+            <section id="processing-section" class="section">
+                <div class="spinner-wrap">
+                    <div class="spinner"></div>
+                </div>
+                <p class="processing-text">Removing background<span class="dots"></span></p>
+                <p class="processing-hint">This may take a moment for larger images</p>
+            </section>
+
+            <!-- Result State -->
+            <section id="result-section" class="section">
+                <h2>Result</h2>
+                <div class="result-grid">
+                    <div class="result-card">
+                        <span class="result-label">Original</span>
+                        <div class="result-img-wrap">
+                            <img id="result-original" src="" alt="Original image" />
+                        </div>
+                    </div>
+                    <div class="result-card">
+                        <span class="result-label">Background Removed</span>
+                        <div class="result-img-wrap checkerboard">
+                            <img id="result-processed" src="" alt="Processed image with background removed" />
+                        </div>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <a id="download-btn" class="btn btn-primary" href="#" download>
+                        <svg class="btn-icon" viewBox="0 0 20 20" fill="currentColor">
+                            <path
+                                d="M10.75 2.75a.75.75 0 00-1.5 0v8.614L6.295 8.235a.75.75 0 10-1.09 1.03l4.25 4.5a.75.75 0 001.09 0l4.25-4.5a.75.75 0 00-1.09-1.03l-2.955 3.129V2.75z" />
+                            <path
+                                d="M3.5 12.75a.75.75 0 00-1.5 0v2.5A2.75 2.75 0 004.75 18h10.5A2.75 2.75 0 0018 15.25v-2.5a.75.75 0 00-1.5 0v2.5c0 .69-.56 1.25-1.25 1.25H4.75c-.69 0-1.25-.56-1.25-1.25v-2.5z" />
+                        </svg>
+                        Download PNG
+                    </a>
+                    <button id="reset-btn" class="btn btn-ghost" type="button">Process Another</button>
+                </div>
+            </section>
+
+            <!-- Error State -->
+            <section id="error-section" class="section">
+                <div class="error-icon-wrap">
+                    <svg class="error-icon" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" />
+                        <path d="M12 8v4m0 4h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                </div>
+                <p id="error-message" class="error-text">Something went wrong.</p>
+                <button id="error-retry-btn" class="btn btn-primary" type="button">Try Again</button>
+            </section>
+
+        </main>
+
+        <footer class="app-footer">
+            <p>Powered by <strong>U²-Net</strong> · Built with Flask &amp; rembg</p>
+        </footer>
+    </div>
+
+    <script>
+        (() => {
+            // DOM refs
+            const dropZone = document.getElementById("drop-zone");
+            const fileInput = document.getElementById("file-input");
+            const previewImg = document.getElementById("preview-img");
+            const processBtn = document.getElementById("process-btn");
+            const changeBtn = document.getElementById("change-btn");
+            const downloadBtn = document.getElementById("download-btn");
+            const resetBtn = document.getElementById("reset-btn");
+            const errorRetryBtn = document.getElementById("error-retry-btn");
+            const errorMessage = document.getElementById("error-message");
+            const resultOriginal = document.getElementById("result-original");
+            const resultProcessed = document.getElementById("result-processed");
+
+            const sections = {
+                upload: document.getElementById("upload-section"),
+                preview: document.getElementById("preview-section"),
+                processing: document.getElementById("processing-section"),
+                result: document.getElementById("result-section"),
+                error: document.getElementById("error-section"),
+            };
+
+            let selectedFile = null;
+
+            // --- Helpers ---
+            function showSection(name) {
+                Object.entries(sections).forEach(([key, el]) => {
+                    el.classList.toggle("active", key === name);
+                });
+            }
+
+            function showError(msg) {
+                errorMessage.textContent = msg;
+                showSection("error");
+            }
+
+            function validateFile(file) {
+                const allowed = ["image/png", "image/jpeg", "image/webp", "image/bmp"];
+                if (!allowed.includes(file.type)) {
+                    return "Unsupported file type. Please upload a PNG, JPG, WEBP, or BMP image.";
+                }
+                if (file.size > 16 * 1024 * 1024) {
+                    return "File is too large. Maximum size is 16 MB.";
+                }
+                return null;
+            }
+
+            function handleFile(file) {
+                const err = validateFile(file);
+                if (err) { showError(err); return; }
+
+                selectedFile = file;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    resultOriginal.src = e.target.result;
+                    showSection("preview");
+                };
+                reader.readAsDataURL(file);
+            }
+
+            // --- Drop Zone Events ---
+            dropZone.addEventListener("click", () => fileInput.click());
+            dropZone.addEventListener("keydown", (e) => {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fileInput.click(); }
+            });
+
+            ["dragenter", "dragover"].forEach((evt) =>
+                dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.add("drag-over"); })
+            );
+            ["dragleave", "drop"].forEach((evt) =>
+                dropZone.addEventListener(evt, (e) => { e.preventDefault(); dropZone.classList.remove("drag-over"); })
+            );
+
+            dropZone.addEventListener("drop", (e) => {
+                const file = e.dataTransfer.files[0];
+                if (file) handleFile(file);
+            });
+
+            fileInput.addEventListener("change", () => {
+                const file = fileInput.files[0];
+                if (file) handleFile(file);
+                fileInput.value = "";
+            });
+
+            // --- Buttons ---
+            changeBtn.addEventListener("click", () => { selectedFile = null; showSection("upload"); });
+            resetBtn.addEventListener("click", () => {
+                selectedFile = null;
+                if (resultProcessed.src.startsWith("blob:")) URL.revokeObjectURL(resultProcessed.src);
+                showSection("upload");
+            });
+            errorRetryBtn.addEventListener("click", () => { selectedFile = null; showSection("upload"); });
+
+            processBtn.addEventListener("click", async () => {
+                if (!selectedFile) return;
+                showSection("processing");
+
+                const formData = new FormData();
+                formData.append("image", selectedFile);
+
+                try {
+                    const resp = await fetch("/remove-bg", { method: "POST", body: formData });
+
+                    if (!resp.ok) {
+                        const data = await resp.json().catch(() => null);
+                        throw new Error(data?.error || `Server error (${resp.status})`);
+                    }
+
+                    const blob = await resp.blob();
+                    const url = URL.createObjectURL(blob);
+
+                    resultProcessed.src = url;
+                    downloadBtn.href = url;
+
+                    // Build download filename
+                    const baseName = selectedFile.name.replace(/\.[^.]+$/, "");
+                    downloadBtn.download = `${baseName}_no_bg.png`;
+
+                    showSection("result");
+                } catch (err) {
+                    showError(err.message || "Failed to process image. Please try again.");
+                }
+            });
+
+            // --- Animated dots ---
+            const dotsEl = document.querySelector(".dots");
+            let dotCount = 0;
+            setInterval(() => {
+                dotCount = (dotCount + 1) % 4;
+                if (dotsEl) dotsEl.textContent = ".".repeat(dotCount);
+            }, 400);
+        })();
+    </script>
+</body>
+
+</html>

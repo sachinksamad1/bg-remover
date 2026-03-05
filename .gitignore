@@ -1,0 +1,47 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual environment
+venv/
+venv
+.venv/
+env/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+
+# U2-Net model weights (large binary)
+models/*.pth
+models/*.onnx
+
+# Docker
+.dockerignore
+
+# vfox
+.vfox/
+.vfox
+.vfox.json
+
+# Byte-compiled / optimized
+*.pyc
