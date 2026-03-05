@@ -84,7 +84,7 @@ bg-remover/
 ### 1. Clone the Repository
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/sachinksamad1/bg-remover.git
 cd bg-remover
 ```
 
